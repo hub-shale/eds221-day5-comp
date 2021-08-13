@@ -1,0 +1,29 @@
+---
+title: "runoff"
+author: "Shale"
+date: "8/13/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Using the runoff function created in `src`
+
+```{r}
+rock_est = seq(from = .6, to = .8, by = .01)
+my_shed_model = predict_runoff(imp_frac = rock_est, wshed_area = 182)
+
+shed_df = data.frame(rock_est, my_shed_model)
+```
+
+```{r}
+ggplot(shed_df, aes(x = rock_est, y = my_shed_model)) +
+  geom_point() +
+  geom_line() +
+  labs(x = "Percent of Watershed Impervious", y = "Estimated Runoff")
+
+ggsave(here("figs", "runoff_model.png"))
+```
+

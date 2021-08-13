@@ -43,16 +43,16 @@ Add line-by-line comments wheres prompted in the code below, explaining what eac
 # ------ WHAT HAPPENS HERE? ------ #
 # ------ comment line-by-line ---- #
 
-# The line below...
+# A vector is set up with all the time values (0-8) at which we want to iterate the leslie projection.
 time_yr <- seq(from = 0, to = 8, by = 1)
 
-# The line below...
+# An empty marix is created to hold all our eventual output data, with number of columns = length of fish_year0 (one column for each life stage) and numberof rows = length of time_yr (one row for each year we will iterate over).
 proj_year <- matrix(ncol = length(fish_year0), nrow = length(time_yr))
 
-# The line below...
+# Fills the first row of proj_year with the initial condition (data from fish_year0)
 proj_year[1, ] <- fish_year0
 
-# The for loop below...
+# The for loop below takes the dot product of fish_leslie by the previous year to populate the next year's row, starting at position 2 in time_yr (because position 1 is year 0, which we already have as the initial condition).
 for (i in 2:length(time_yr)) {
   proj_year[i,] <- fish_leslie %*% proj_year[i-1,]
 }

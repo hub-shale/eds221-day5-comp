@@ -1,0 +1,58 @@
+---
+title: "tilapia"
+author: "Shale"
+date: "8/13/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(here)
+library(janitor)
+```
+
+## Task 2, Wild Data
+
+```{r}
+us_tilapia_imports = read_csv(here("data", "us_tilapia_imports.csv"))
+```
+
+```{r}
+tilapia_imports = us_tilapia_imports %>%
+  pivot_longer(-country, names_to = "year", values_to = "tilapia_tons") %>% 
+  mutate(year = as.numeric(year))
+  
+tilapia_imports 
+
+```
+
+```{r}
+yearly_tilapia_tot = tilapia_imports %>%
+  group_by(year) %>%
+  summarise(tilapia_tons = sum(tilapia_tons, na.rm = TRUE))
+
+```
+
+```{r}
+ggplot(yearly_tilapia_tot, aes(x = year, y = tilapia_tons)) +
+  geom_line(color = "purple") +
+  labs(x="Year", y="Total Tilapia Imported (tons)")
+
+ggsave(here("figs", "total annual imports.png"))
+```
+
+```{r}
+tilapia_central_a = tilapia_imports %>% filter(country == "Ecuador" | country == "Honduras" | country == "Mexico" | country == "Costa Rico")
+  
+```
+
+```{r}
+ggplot(tilapia_central_a, aes(x = year, y = tilapia_tons)) +
+  geom_line(position = "jitter", aes(color = country)) +
+  labs(title = "Tilapia Imports by Country", x = "Year",  y = "Total Tilapia Imported (tons)") +
+  theme_minimal()
+
+ggsave(here("figs", "Central America Tilapia Imports.jpg"))
+```
+
